@@ -355,7 +355,7 @@ function script_ready() {
     var count = calculate_totalc();
     var total = calculate_totalt();
             
-    if (invested.toFixed(2) !== total.toFixed(2)) {
+    if (Math.abs(invested - total) > 0.1) {
         return false;
     }
 
