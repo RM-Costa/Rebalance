@@ -398,17 +398,20 @@ function script_clear() {
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function execute() {
-
+            
+    var cron;
+    
     $(window).on('hashchange', function () {
-
+                
+        clearInterval(cron);
         script_clear();
 
-        if (window.location.href === 'https://trader.degiro.nl/trader/#!/portfolio?type=active') {
-            
-            var cron = window.setInterval(function () {
+        if (window.location.href.startsWith('https://trader.degiro.nl/trader/#!/portfolio')) {
+                        
+            cron = window.setInterval(function () {
 
                 if (script_ready()) {
-
+                    
                     clearInterval(cron);
                     script_start();
                 }
