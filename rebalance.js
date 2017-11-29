@@ -1,5 +1,68 @@
 
-function append_btton() {
+function Script() {
+
+    this.cron;
+
+    this.listen_change_page();
+    this.listen_change_url();
+}
+
+Script.prototype.execute = function () {
+
+    var self = this;
+
+    $(document).on('execute', function () {
+
+        clearInterval(self.cron);
+
+        self.remove_btton();
+        self.remove_input();
+        self.remove_table();
+
+        if (window.location.href.startsWith('https://trader.degiro.nl/trader/#!/portfolio')) {
+
+            self.cron = window.setInterval(function () {
+
+                if (self.ready()) {
+
+                    clearInterval(self.cron);
+
+                    self.append_btton();
+                    self.append_input();
+                    self.append_table();
+
+                    self.setup_anims();
+                    self.setup_logic();
+                }
+
+            }, 250);
+        }
+    });
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Script.prototype.listen_change_page = function () {
+
+    // Execute script when page reloads
+
+    $(document).ready(function () {
+        $(document).trigger('execute');
+    });
+};
+
+Script.prototype.listen_change_url = function () {
+
+    // Execute script when url changes
+
+    $(window).on('hashchange', function () {
+        $(document).trigger('execute');
+    });
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Script.prototype.append_btton = function () {
 
     // Append button
 
@@ -7,15 +70,15 @@ function append_btton() {
             + '<i aria-hidden="true" data-dg-icon="pie-chart" class="icon icon-pie-chart"></i>'
             + 'Rebalancear'
             + '</a>';
-        
+
     $('.header__controls-toolbar').append(button);
 
     $('.icon-pie-chart').css({
         'margin-right': '5px'
     });
-}
+};
 
-function append_input() {
+Script.prototype.append_input = function () {
 
     // Append input
 
@@ -28,9 +91,9 @@ function append_input() {
         'color': '#919191',
         'height': '30px'
     });
-}
+};
 
-function append_table() {
+Script.prototype.append_table = function () {
 
     // Append table
 
@@ -82,65 +145,67 @@ function append_table() {
         'padding': '7px',
         'font-size': '12px'
     });
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function remove_btton() {
+Script.prototype.remove_btton = function () {
 
     // Remove button
 
     $('.rebalance_button').remove();
-}
+};
 
-function remove_input() {
+Script.prototype.remove_input = function () {
 
     // Remove input
 
     $('.rebalance_input').remove();
-}
+};
 
-function remove_table() {
+Script.prototype.remove_table = function () {
 
     // Remove table
 
     $('.rebalance_table').remove();
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function read_invest() {
+Script.prototype.read_invest = function () {
 
     // Read invested value
 
     return parseFloat($('*[data-dg-watch-property="portfolio"]').text().replace('.', '').replace(',', '.'));
-}
+};
 
-function read_excedn() {
+Script.prototype.read_excedn = function () {
 
     // Read exceding value
 
     return parseFloat($('*[data-dg-watch-property="valueByCostsType"]').text().replace('.', '').replace(',', '.'));
-}
+};
 
-function read_portfl() {
+Script.prototype.read_portfl = function () {
 
     // Read portfolio value
 
-    var invested = read_invest();
-    var exceding = read_excedn();
+    var self = this;
+
+    var invested = self.read_invest();
+    var exceding = self.read_excedn();
 
     return invested + exceding;
-}
+};
 
-function read_rnfrcm() {
+Script.prototype.read_rnfrcm = function () {
 
     // Read reinforcement value
 
     return parseFloat($('.dashboard__amount_invs').val().replace('.', '').replace(',', '.'));
-}
+};
 
-function read_anames() {
+Script.prototype.read_anames = function () {
 
     // Read assets names
 
@@ -151,9 +216,9 @@ function read_anames() {
     });
 
     return names;
-}
+};
 
-function read_values() {
+Script.prototype.read_values = function () {
 
     // Read assets value
 
@@ -164,9 +229,9 @@ function read_values() {
     });
 
     return values;
-}
+};
 
-function read_amount() {
+Script.prototype.read_amount = function () {
 
     // Read assets quantity
 
@@ -177,9 +242,9 @@ function read_amount() {
     });
 
     return amount;
-}
+};
 
-function read_pdesir() {
+Script.prototype.read_pdesir = function () {
 
     // Read desired proportions
 
@@ -190,47 +255,47 @@ function read_pdesir() {
     });
 
     return pdesir;
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function write_orders(orders) {
+Script.prototype.write_orders = function (orders) {
 
     // Write buying orders
 
     $('.orders').each(function (i) {
         $(this).text(orders[i]);
     });
-}
+};
 
-function write_piniti(piniti) {
+Script.prototype.write_piniti = function (piniti) {
 
     // Write initial proportions
 
     $('.piniti').each(function (i) {
         $(this).text(piniti[i].toFixed(1));
     });
-}
+};
 
-function write_pfinal(pfinal) {
+Script.prototype.write_pfinal = function (pfinal) {
 
     // Write final proportions
 
     $('.pfinal').each(function (i) {
         $(this).text(pfinal[i].toFixed(1));
     });
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function calculate_totalc() {
+Script.prototype.calculate_totalc = function () {
 
     // Calculate total assets count
 
     return $('.portfolio__table-cell_position-value span').length;
-}
+};
 
-function calculate_totalt() {
+Script.prototype.calculate_totalt = function () {
 
     // Calculate total assets value
 
@@ -241,16 +306,16 @@ function calculate_totalt() {
     });
 
     return total;
-}
+};
 
-function calculate_totalm(portfl, rnfrcm) {
+Script.prototype.calculate_totalm = function (portfl, rnfrcm) {
 
     // Calculate total money
 
     return portfl + rnfrcm;
-}
+};
 
-function calculate_piniti(values, amount, portfl) {
+Script.prototype.calculate_piniti = function (values, amount, portfl) {
 
     // Calculate current percentages                
 
@@ -261,9 +326,9 @@ function calculate_piniti(values, amount, portfl) {
     });
 
     return piniti;
-}
+};
 
-function calculate_pfinal(orders, totalm, values, amount) {
+Script.prototype.calculate_pfinal = function (orders, totalm, values, amount) {
 
     // Calculate final percentages
 
@@ -274,9 +339,9 @@ function calculate_pfinal(orders, totalm, values, amount) {
     });
 
     return pfinal;
-}
+};
 
-function calculate_orders(pdesir, totalm, values, amount) {
+Script.prototype.calculate_orders = function (pdesir, totalm, values, amount) {
 
     // Calculate buying orders
 
@@ -287,11 +352,11 @@ function calculate_orders(pdesir, totalm, values, amount) {
     });
 
     return orders;
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function setup_anims() {
+Script.prototype.setup_anims = function () {
 
     // Setup animations
 
@@ -299,11 +364,13 @@ function setup_anims() {
         $('.rebalance_table').animate({height: 'toggle'});
         $('.rebalance_input').animate({width: 'toggle'});
     });
-}
+};
 
-function setup_logic() {
+Script.prototype.setup_logic = function () {
 
     // Setup logic
+
+    var self = this;
 
     $('.rebalance_variable').on('input', function () {
 
@@ -321,125 +388,67 @@ function setup_logic() {
 
         // Read data
 
-        portfl = read_portfl();
-        rnfrcm = read_rnfrcm();
+        portfl = self.read_portfl();
+        rnfrcm = self.read_rnfrcm();
 
-        values = read_values();
-        amount = read_amount();
+        values = self.read_values();
+        amount = self.read_amount();
 
-        pdesir = read_pdesir();
+        pdesir = self.read_pdesir();
 
         // Calculate values
 
-        totalm = calculate_totalm(portfl, rnfrcm);
-        piniti = calculate_piniti(values, amount, portfl);
-        orders = calculate_orders(pdesir, totalm, values, amount);
-        pfinal = calculate_pfinal(orders, totalm, values, amount);
+        totalm = self.calculate_totalm(portfl, rnfrcm);
+        piniti = self.calculate_piniti(values, amount, portfl);
+        orders = self.calculate_orders(pdesir, totalm, values, amount);
+        pfinal = self.calculate_pfinal(orders, totalm, values, amount);
 
         // Update interface
 
-        write_piniti(piniti);
-        write_orders(orders);
-        write_pfinal(pfinal);
+        self.write_piniti(piniti);
+        self.write_orders(orders);
+        self.write_pfinal(pfinal);
     });
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function script_ready() {
+Script.prototype.ready = function () {
 
     // Check data
 
-    var invested = read_invest();
+    var self = this;
 
-    var count = calculate_totalc();
-    var total = calculate_totalt();
-    
+    var invested = self.read_invest();
+
+    var count = self.calculate_totalc();
+    var total = self.calculate_totalt();
+
     if (count === 0) {
         return false;
     }
-        
-    if (count !== read_anames().length) {
+
+    if (count !== self.read_anames().length) {
         return false;
     }
 
-    if (count !== read_values().length) {
+    if (count !== self.read_values().length) {
         return false;
     }
 
-    if (count !== read_amount().length) {
+    if (count !== self.read_amount().length) {
         return false;
     }
-    
+
     if (Math.abs(invested - total) > 0.1) {
         return false;
     }
-    
+
     return true;
-}
-
-function script_start() {
-
-    // Run script
-
-    append_btton();
-    append_input();
-    append_table();
-
-    setup_anims();
-    setup_logic();
-}
-
-function script_clear() {
-
-    // Remove elements
-
-    remove_btton();
-    remove_input();
-    remove_table();
-}
+};
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-function execute() {
+var script = new Script();
 
-    var cron;    
-    var interval = 250;
-    var prefix = 'https://trader.degiro.nl/trader/#!/portfolio';
-            
-    if (window.location.href.startsWith(prefix)) {
-                
-        cron = window.setInterval(function () {
-
-            if (script_ready()) {
-                
-                clearInterval(cron);
-                script_start();
-            }
-
-        }, interval);
-    }
-
-    $(window).on('hashchange', function () {
-                
-        clearInterval(cron);
-        script_clear();
-
-        if (window.location.href.startsWith(prefix)) {
-
-            cron = window.setInterval(function () {
-
-                if (script_ready()) {
-
-                    clearInterval(cron);
-                    script_start();
-                }
-
-            }, interval);
-        }
-    });
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-execute();
+script.execute();
