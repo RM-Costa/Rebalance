@@ -355,7 +355,7 @@ function script_ready() {
     var count = calculate_totalc();
     var total = calculate_totalt();
     
-    if (Math.abs(invested - total) > 0.1) {
+    if (count === 0) {
         return false;
     }
         
@@ -368,6 +368,10 @@ function script_ready() {
     }
 
     if (count !== read_amount().length) {
+        return false;
+    }
+    
+    if (Math.abs(invested - total) > 0.1) {
         return false;
     }
     
