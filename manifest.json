@@ -1,0 +1,18 @@
+{
+
+    "description": "Automatic Portfolio Rebalance",
+    "manifest_version": 2,
+    "name": "Rebalance",
+    "version": "1.0",
+    "icons": {
+        "48": "icon.png"
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["*://*.degiro.nl/*"],
+            "js": ["jquery.js", "rebalance.js"]
+        }
+    ]
+	
+}
