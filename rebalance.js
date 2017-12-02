@@ -251,7 +251,7 @@ Script.prototype.read_pdesir = function () {
     var pdesir = [];
 
     $('.pdesir').each(function () {
-        pdesir.push(parseFloat($(this).val().replace('.', '').replace(',', '.')));
+        pdesir.push(parseFloat($(this).val()));
     });
 
     return pdesir;
