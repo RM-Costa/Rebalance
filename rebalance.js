@@ -374,7 +374,7 @@ Script.prototype.setup_logic = function () {
 
     $('.rebalance_variable').on('input', function () {
 
-        var portfl;
+        var invest;
         var rnfrcm;
         var totalm;
 
@@ -387,8 +387,8 @@ Script.prototype.setup_logic = function () {
         var orders = [];
 
         // Read data
-
-        portfl = self.read_portfl();
+        
+        invest = self.read_invest();
         rnfrcm = self.read_rnfrcm();
 
         values = self.read_values();
@@ -398,8 +398,8 @@ Script.prototype.setup_logic = function () {
 
         // Calculate values
 
-        totalm = self.calculate_totalm(portfl, rnfrcm);
-        piniti = self.calculate_piniti(values, amount, portfl);
+        totalm = self.calculate_totalm(invest, rnfrcm);
+        piniti = self.calculate_piniti(values, amount, invest);
         orders = self.calculate_orders(pdesir, totalm, values, amount);
         pfinal = self.calculate_pfinal(orders, totalm, values, amount);
 
