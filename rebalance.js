@@ -19,7 +19,7 @@ Script.prototype.execute = function () {
         self.remove_input();
         self.remove_table();
 
-        if (window.location.href.startsWith('https://trader.degiro.nl/trader/#!/portfolio')) {
+        if (window.location.href.startsWith('https://trader.degiro.nl/trader/#/portfolio')) {
 
             self.cron = window.setInterval(function () {
 
@@ -67,7 +67,6 @@ Script.prototype.append_btton = function () {
     // Append button
 
     var button = '<a class="header__controls-button ng-binding rebalance_button" href="" onclick="return false;">'
-            + '<i aria-hidden="true" data-dg-icon="pie-chart" class="icon icon-pie-chart"></i>'
             + 'Rebalancear'
             + '</a>';
 
@@ -176,14 +175,14 @@ Script.prototype.read_invest = function () {
 
     // Read invested value
 
-    return parseFloat($('*[data-dg-watch-property="portfolio"]').text().replace('.', '').replace(',', '.'));
+    return parseFloat($('*[data-field="portfolio"]').text().replace('.', '').replace(',', '.'));
 };
 
 Script.prototype.read_excedn = function () {
 
     // Read exceding value
 
-    return parseFloat($('*[data-dg-watch-property="valueByCostsType"]').text().replace('.', '').replace(',', '.'));
+    return parseFloat($('*[data-field="valueByCostsType"]').text().replace('.', '').replace(',', '.'));
 };
 
 Script.prototype.read_portfl = function () {
