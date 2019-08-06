@@ -223,7 +223,7 @@ Script.prototype.read_values = function () {
 
     var values = [];
 
-    $('.portfolio__table-cell_price span').each(function () {
+    $('*[data-field="price"]').each(function () {
         values.push(parseFloat($(this).text().replace('.', '').replace(',', '.')));
     });
 
